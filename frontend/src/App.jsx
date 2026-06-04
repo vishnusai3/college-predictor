@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -67,6 +68,7 @@ function App() {
           {/* 404 Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <Analytics />
       </AuthProvider>
     </Router>
   );
