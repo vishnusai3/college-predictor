@@ -1,0 +1,9 @@
+node_modules/
+frontend/node_modules/
+.env
+uploads/
+dist/
+build/
+frontend/dist/
+.vscode/
+*.log

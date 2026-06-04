@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --bg-1: #f8fafc; /* slate-50 */
+  --bg-2: #f1f5f9; /* slate-100 */
+  --card: #ffffff;
+  --muted: #64748b; /* slate-500 */
+  --primary: #2563eb; /* blue-600 */
+  --accent: #4f46e5; /* indigo-600 */
+  --glass: rgba(255,255,255,0.7);
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Poppins, Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #0f172a; /* slate-900 */
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,0.04), transparent 15%), linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth transitions for interactive elements */
+* { transition: background-color 200ms ease, color 200ms ease, transform 120ms ease; }
+
+/* Card component */
+@layer components {
+  .card {
+    @apply rounded-3xl border border-slate-200/80 bg-[color:var(--card)] p-6;
+    box-shadow: 0 10px 40px rgba(15,23,42,0.03);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-3 font-semibold rounded-2xl px-5 py-3 text-white transition-all hover:opacity-95 hover:shadow-lg;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    box-shadow: 0 8px 25px rgba(59,130,246,0.15);
+  }
+
+  .muted-text { color: var(--muted); }
+}
+
+/* Small helper for hover popover shadow */
+.popover-card { @apply rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700 shadow-xl; }
+
+/* Make inputs look smoother by default */
+input, select, textarea, button {
+  outline: none;
+  transition: background-color 200ms ease, color 200ms ease, transform 120ms ease, box-shadow 200ms ease;
+}
+
+input:focus, select:focus, textarea:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
