@@ -15,23 +15,47 @@ const Results = () => {
   const navigate = useNavigate();
 
   const [filters, setFilters] = useState({
-    search: '',
-    district: '',
+    search: new URLSearchParams(location.search).get('search') || '',
+    district: new URLSearchParams(location.search).get('district') || '',
     branch_code: new URLSearchParams(location.search).get('branch_code') || ''
   });
 
-  // Sync activeTab with URL chance param
+  const [profileSummary, setProfileSummary] = useState({
+    rank: new URLSearchParams(location.search).get('rank') || '',
+    category: new URLSearchParams(location.search).get('category') || '',
+    gender: new URLSearchParams(location.search).get('gender') || ''
+  });
+
+  // Sync activeTab with URL chance param and keep filters/profile summary in sync
   useEffect(() => {
     const p = new URLSearchParams(location.search);
     const c = p.get('chance');
     if (c) setActiveTab(c.toUpperCase());
+
+    setFilters(prev => ({
+      ...prev,
+      search: p.get('search') || '',
+      district: p.get('district') || '',
+      branch_code: p.get('branch_code') || ''
+    }));
+
+    setProfileSummary({
+      rank: p.get('rank') || '',
+      category: p.get('category') || '',
+      gender: p.get('gender') || ''
+    });
   }, [location.search]);
 
   const fetchResults = async () => {
     setLoading(true);
     try {
       const currentParams = new URLSearchParams(location.search);
-      if (currentParams.has('chance')) currentParams.delete('chance');
+      // Keep the current chance filter when fetching results
+      if (activeTab && activeTab !== 'ALL') {
+        currentParams.set('chance', activeTab);
+      } else {
+        currentParams.delete('chance');
+      }
       // Append local filters if they exist
       if (filters.search) currentParams.set('search', filters.search);
       if (filters.district) currentParams.set('district', filters.district);
@@ -140,11 +164,21 @@ const Results = () => {
         <div className="card mb-8 border-slate-200/80 p-8 shadow-[0_15px_50px_rgba(15,23,42,0.02)]">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <Link to="/predict" className="flex items-center gap-2 text-slate-500 hover:text-cyan-600 transition-colors mb-4 group text-sm font-bold uppercase tracking-widest">
-                <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                Adjust Profile
-              </Link>
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <Link to="/predict" className="flex items-center gap-2 text-slate-500 hover:text-cyan-600 transition-colors group text-sm font-bold uppercase tracking-widest">
+                  <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                  Adjust Profile
+                </Link>
+                <Link to="/predict" className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700 transition">
+                  Home
+                </Link>
+              </div>
               <h1 className="text-4xl font-black text-slate-900">Your Predictions</h1>
+              <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-600">
+                {profileSummary.rank && <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold">Rank: {profileSummary.rank}</span>}
+                {profileSummary.category && <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold">Category: {profileSummary.category}</span>}
+                {profileSummary.gender && <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold">Gender: {profileSummary.gender}</span>}
+              </div>
               <p className="text-slate-500 mt-2">Found {pagination.total || 0} colleges matching your profile</p>
             </div>
             <div className="flex flex-wrap gap-3">

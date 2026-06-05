@@ -99,11 +99,12 @@ const getPredictions = async (req, res) => {
       AND (gender = ${genderPlaceholder} OR gender = 'B' OR gender = 'BOTH')
     `;
 
-    params.push(minRankWindow, maxRankWindow);
+    const chanceUpper = chance ? chance.toUpperCase() : 'ALL';
+    const effectiveMinRankWindow = chanceUpper === 'ALL' ? 1 : minRankWindow;
+    params.push(effectiveMinRankWindow, maxRankWindow);
     query += ` AND closing_rank BETWEEN $${params.length - 1} AND $${params.length}`;
 
     // Apply chance parameter filters
-    const chanceUpper = chance ? chance.toUpperCase() : 'ALL';
     if (chanceUpper === 'SAFE') {
       // safe colleges: closing rank is far enough from student rank (easier admit)
       params.push(Math.ceil(studentRank / 0.7));
@@ -156,7 +157,7 @@ const getPredictions = async (req, res) => {
 
     // Final Sorting and Pagination
     params.push(effectiveLimit, offset);
-    query += ` ORDER BY closing_rank ASC LIMIT $${params.length - 1} OFFSET $${params.length}`;
+    query += ` ORDER BY ABS(closing_rank - $1) ASC, closing_rank ASC LIMIT $${params.length - 1} OFFSET $${params.length}`;
 
     const result = await db.query(query, params);
 
