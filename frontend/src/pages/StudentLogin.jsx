@@ -32,7 +32,8 @@ const StudentLogin = () => {
       const { data } = await api.post('/auth/student-signup', { name, mobile_number, password });
       login(data.student, data.token);
     } catch (err) {
-      setError(err.response?.data?.message || 'Signup failed');
+      console.error('Signup Error:', err);
+      setError(err.response?.data?.message || err.message || 'Signup failed');
     }
   };
 
@@ -50,7 +51,8 @@ const StudentLogin = () => {
       const { data } = await api.post('/auth/student-login', { mobile_number, password });
       login(data.student, data.token);
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      console.error('Login Error:', err);
+      setError(err.response?.data?.message || err.message || 'Login failed');
     }
   };
 

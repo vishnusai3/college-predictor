@@ -1,9 +1,5 @@
 const { Pool } = require('pg');
 require('dotenv').config();
-
-console.log("Current Directory:", process.cwd());
-console.log("DATABASE_URL =", process.env.DATABASE_URL);
-
 if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes('[PASSWORD]')) {
   console.error('❌ ERROR: DATABASE_URL is not configured correctly in .env file.');
   console.error('Expected format: postgresql://postgres:password@host:port/database');
