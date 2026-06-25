@@ -2,19 +2,8 @@
 
 const Home = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
-      <video
-        className="absolute inset-0 h-full w-full object-cover opacity-80"
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-        <source src="/67358-521707474_medium.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-
-      <div className="absolute inset-0 bg-slate-950/60" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+      <div className="absolute inset-0 bg-slate-950/70" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-12">
         <div className="max-w-3xl text-center">
